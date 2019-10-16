@@ -1,0 +1,29 @@
+version: '2.3'
+
+services:
+
+  pg_activity:
+    image: tophfr/pg_activity:$TAG
+    build:
+      context: build
+      args:
+        PG_ACTIVITY_VERSION: $VERSION
+    environment: &pgenv
+      PGHOST: db
+      PGUSER: postgres
+      PGPASSWORD: password
+
+  db:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+
+  test:
+    image: postgres:12-alpine
+    restart: unless-stopped
+    command: sh -c 'psql -Xntw -c "select $$HOSTNAME, now(), pg_sleep(5)"'
+    environment: *pgenv
+
+# vim: ts=2 sts=2 sw=2 et:
