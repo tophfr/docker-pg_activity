@@ -1,10 +1,10 @@
-FROM python:3.11-alpine
+FROM python:3.12-alpine
 
 MAINTAINER toph <toph@toph.fr>
 
 RUN apk add --no-cache postgresql-libs
 
-ARG PG_ACTIVITY_VERSION=3.0.1
+ARG PG_ACTIVITY_VERSION=3.5.1
 ENV PG_ACTIVITY_VERSION $PG_ACTIVITY_VERSION
 
 RUN apk add --no-cache --virtual .build-deps \

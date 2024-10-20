@@ -6,6 +6,9 @@ services:
     image: tophfr/pg_activity:$TAG
     build:
       context: build
+      platforms:
+        - linux/amd64
+#        - linux/arm64
       args:
         PG_ACTIVITY_VERSION: $VERSION
     environment: &pgenv
@@ -14,16 +17,19 @@ services:
       PGPASSWORD: password
 
   db:
-    image: postgres:12-alpine
+    image: postgres:17-alpine
     environment:
       POSTGRES_PASSWORD: password
     ports:
       - 5432:5432
 
   test:
-    image: postgres:12-alpine
+    image: postgres:17-alpine
     restart: unless-stopped
-    command: sh -c 'psql -Xntw -c "select $$HOSTNAME, now(), pg_sleep(5)"'
+    command:
+      - sh 
+      - -c
+      - psql -Xntw -c "select '$$HOSTNAME', now(), pg_sleep(5)"
     environment: *pgenv
 
 # vim: ts=2 sts=2 sw=2 et:
